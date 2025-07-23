@@ -1,0 +1,9 @@
+{% extends 'user/base.html' %}
+{% block content %}
+<h2>Статистика моих рассылок</h2>
+<ul class="list-group">
+  <li class="list-group-item">Всего попыток: {{ total }}</li>
+  <li class="list-group-item text-success">Успешных: {{ success }}</li>
+  <li class="list-group-item text-danger">Неуспешных: {{ failed }}</li>
+</ul>
+{% endblock %}

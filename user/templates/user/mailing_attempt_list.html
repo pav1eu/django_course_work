@@ -1,0 +1,28 @@
+{% extends 'user/base.html' %}
+
+{% block content %}
+<h2>Попытки рассылки</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Дата и время</th>
+            <th>Статус</th>
+            <th>Ответ сервера</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for attempt in attempts %}
+        <tr>
+            <td>{{ attempt.timestamp }}</td>
+            <td>{{ attempt.status }}</td>
+            <td>{{ attempt.server_response }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">Попыток ещё не было.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'user:mailing_list' %}" class="btn btn-secondary">Назад к рассылкам</a>
+{% endblock %}
