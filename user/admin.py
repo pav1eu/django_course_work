@@ -1,6 +1,10 @@
 from django.contrib import admin
-from .models import Client, Message, Mailing, MailingAttempt
+from django.contrib.auth.admin import UserAdmin
 
+from .models import Client, Message, Mailing, MailingAttempt
+from .models import CustomUser
+
+admin.site.register(CustomUser, UserAdmin)
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):

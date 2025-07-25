@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.core.mail import send_mail
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
@@ -15,6 +15,20 @@ class Client(models.Model):
         return f"{self.full_name} <{self.email}>"
 
 
+# Create your models here.
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
+
+    ACCOUNT_AUTHENTICATION_METHOD = 'email'
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    def __str__(self):
+        return self.email
+
 class Message(models.Model):
     title = models.CharField(max_length=100, verbose_name='Тема письма')
     body = models.TextField(blank=True, null=True, verbose_name='Содержимое письма')
@@ -23,7 +37,7 @@ class Message(models.Model):
         return self.title
 
 class Mailing(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Владелец')
     STATUS_CHOICES = [
         ('created', 'Создана'),
         ('started', 'Запущена'),
@@ -38,6 +52,10 @@ class Mailing(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        permissions = (
+        ('can_view_all_mailings', 'Can view all mailings'),
+        )
 
     def update_status(self):
         now = timezone.now()
