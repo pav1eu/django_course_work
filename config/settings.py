@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
-
-from django.conf.global_settings import LOGIN_URL, AUTHENTICATION_BACKENDS
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -164,14 +162,11 @@ CACHES = {
     }
 }
 
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+AUTH_USER_MODEL = 'user.CustomUser'
+LOGIN_URL = 'user:login'
+LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username', 'password1*', 'password2*']
-ACCOUNT_LOGIN_METHOD = ['email', 'password']
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SIGNUP_FIELDS = ['email', 'password1', 'password2']
+ACCOUNT_LOGIN_METHOD = 'email'
 
