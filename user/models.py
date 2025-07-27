@@ -7,6 +7,9 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class Client(models.Model):
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец"
+    )
     email = models.EmailField(unique=True, verbose_name="Электронная почта")
     full_name = models.CharField(max_length=100, verbose_name="ФИО")
     comment = models.TextField(blank=True, null=True, verbose_name="Комментарий")
@@ -31,6 +34,9 @@ class CustomUser(AbstractUser):
 
 
 class Message(models.Model):
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец"
+    )
     title = models.CharField(max_length=100, verbose_name="Тема письма")
     body = models.TextField(blank=True, null=True, verbose_name="Содержимое письма")
 

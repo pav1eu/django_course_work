@@ -16,7 +16,7 @@
         <tr>
             <td>{{ msg.title }}</td>
             <td>
-                {% if request.user == mailing.owner or request.user.groups.all.0.name == 'Менеджер' %}
+                {% if request.user == message.owner or  request.user.is_staff %}
                 <a href="{% url 'user:message_update' msg.pk %}" class="btn btn-sm btn-primary">Редактировать</a>
                 <a href="{% url 'user:message_delete' msg.pk %}" class="btn btn-sm btn-danger">Удалить</a>
                 {% endif %}

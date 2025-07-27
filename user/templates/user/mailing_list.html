@@ -18,7 +18,7 @@
         <td>{{ mailing.message.title }}</td>
         <td>{{ mailing.get_status_display }}</td>
         <td>
-            {% if request.user == mailing.owner or request.user.groups.all.0.name == 'Менеджер' %}
+            {% if request.user == mailing.owner or request.user.is_staff %}
             <a href="{% url 'user:mailing_detail' mailing.pk %}" class="btn btn-info btn-sm">Просмотр</a>
             <a href="{% url 'user:mailing_update' mailing.pk %}" class="btn btn-warning btn-sm">Редактировать</a>
             <a href="{% url 'user:mailing_delete' mailing.pk %}" class="btn btn-danger btn-sm">Удалить</a>

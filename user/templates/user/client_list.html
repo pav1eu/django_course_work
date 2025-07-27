@@ -19,7 +19,7 @@
         <td>{{ client.full_name }}</td>
         <td>{{ client.comment }}</td>
         <td>
-            {% if request.user == mailing.owner or request.user.groups.all.0.name == 'Менеджер' %}
+            {% if request.user == client.owner or request.user.is_staff %}
             <a href="{% url 'user:client_update' client.pk %}" class="btn btn-sm btn-primary">Редактировать</a>
             <a href="{% url 'user:client_delete' client.pk %}" class="btn btn-sm btn-danger">Удалить</a>
             {% endif %}

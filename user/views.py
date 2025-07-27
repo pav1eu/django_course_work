@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import View
@@ -37,16 +37,15 @@ class ClientListView(ListView):
     context_object_name = "client_list"
 
 
-class ClientCreateView(CreateView):
+class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Client
     form_class = ClientForm
     template_name = "user/client_form.html"
     success_url = reverse_lazy("user:client_list")
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.groups.filter(name__in=["Менеджер"]).exists():
-            raise PermissionDenied
-        return super().dispatch(request, *args, **kwargs)
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 
 class ClientUpdateView(OwnerOrManagerMixin, UpdateView):
@@ -68,11 +67,15 @@ class MessageListView(LoginRequiredMixin, ListView):
     context_object_name = "message"
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
     template_name = "user/message_form.html"
     success_url = reverse_lazy("user:message_list")
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 
 class MessageUpdateView(OwnerOrManagerMixin, UpdateView):
