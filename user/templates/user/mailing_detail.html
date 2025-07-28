@@ -1,0 +1,55 @@
+{% extends 'user/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Детали рассылки #{{ mailing.id }}</h2>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Статус: <span class="badge bg-info">{{ mailing.get_status_display }}</span></h5>
+            <p><strong>Дата начала:</strong> {{ mailing.start_datetime|date:"d.m.Y H:i" }}</p>
+            <p><strong>Дата окончания:</strong> {{ mailing.end_datetime|date:"d.m.Y H:i" }}</p>
+            <p><strong>Создана:</strong> {{ mailing.created_at|date:"d.m.Y H:i" }}</p>
+            <p><strong>Обновлена:</strong> {{ mailing.updated_at|date:"d.m.Y H:i" }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>Сообщение</strong>
+        </div>
+        <div class="card-body">
+            <h5>{{ mailing.message.title }}</h5>
+            <p>{{ mailing.message.body }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>Получатели</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for client in mailing.recipients.all %}
+            <li class="list-group-item">
+                {{ client.full_name }} ({{ client.email }})
+                {% if client.comment %}
+                <br><small class="text-muted">{{ client.comment }}</small>
+                {% endif %}
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">Нет получателей</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <form action="{% url 'user:mailing_send' mailing.pk %}" method="post" class="mt-3">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Отправить рассылку</button>
+    </form>
+    <a href="{% url 'user:mailing_attempts' mailing.pk %}" class="btn btn-outline-info">
+        Смотреть попытки рассылки
+    </a>
+    <a href="{% url 'user:mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'user:mailing_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
+    <a href="{% url 'user:mailing_list' %}" class="btn btn-secondary">Назад к списку</a>
+</div>
+{% endblock %}

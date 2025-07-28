@@ -1,0 +1,12 @@
+{% extends 'user/base.html' %}
+{% block title %}Сообщение{% endblock %}
+
+{% block content %}
+<h2>{{ view.object.pk|yesno:"Редактировать сообщение,Новое сообщение" }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Сохранить</button>
+    <a href="{% url 'user:message_list' %}" class="btn btn-secondary">Назад</a>
+</form>
+{% endblock %}
